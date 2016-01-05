@@ -1,5 +1,22 @@
 name: SpawnJoin
 main: me.NUKMUK.SpawnJoin
-version: 1.1
+version: 1.3
 author: NUKMUK
 website: https://github.com/NUKMUK/SpawnJoin
+
+commands:
+  sj:
+    usage: "/sj <set|get|spawn|reload> [x] [y] [z] [yaw]"
+    aliases: [sjoin, spawnjoin]
+
+permissions:
+  spawnjoin.help:
+    default: op
+  spawnjoin.set:
+    default: false
+  spawnjoin.get:
+    default: op
+  spawnjoin.spawn:
+    default: op
+  spawnjoin.reload:
+    default: op
