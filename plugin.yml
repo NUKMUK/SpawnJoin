@@ -13,7 +13,7 @@ permissions:
   spawnjoin.help:
     default: op
   spawnjoin.set:
-    default: false
+    default: op
   spawnjoin.get:
     default: op
   spawnjoin.spawn:
