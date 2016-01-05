@@ -17,7 +17,6 @@ public class SpawnJoin extends JavaPlugin implements Listener {
         Bukkit.getServer().getPluginManager().registerEvents(this, this);
         getConfig().options().copyDefaults(true);
         saveConfig();
-
     }
 
     @Override
