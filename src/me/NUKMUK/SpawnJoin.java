@@ -30,7 +30,7 @@ public class SpawnJoin extends JavaPlugin implements Listener {
                 if (p.hasPermission("spawnjoin.help")) {
 
                     p.sendMessage(ChatColor.YELLOW + "---------- " + ChatColor.GOLD + "SpawnJoin" + ChatColor.YELLOW + " ----------");
-                    p.sendMessage(ChatColor.GOLD + "/sj set <x> <y> <z> [yaw] [world]");
+                    p.sendMessage(ChatColor.GOLD + "/sj set <x|yaw> <y> <z> [yaw] [world]");
                     p.sendMessage(ChatColor.GOLD + "/sj get");
                     p.sendMessage(ChatColor.GOLD + "/sj spawn");
                     p.sendMessage(ChatColor.GOLD + "/sj reload");
@@ -40,13 +40,38 @@ public class SpawnJoin extends JavaPlugin implements Listener {
             } else if (args[0].equalsIgnoreCase("set")) {
                 if (p.hasPermission("spawnjoin.set")) {
 
-                    // < 4
-                    if (args.length < 4) {
-                        p.sendMessage(ChatColor.RED + "Usage: /sj set <x> <y> <z> [yaw]");
+                    // not enough coords
+                    if (args.length < 4 && args.length > 2) {
+                        p.sendMessage(ChatColor.RED + "Usage: /sj set <x|yaw> <y> <z> [yaw]");
+                    }
+
+                    //yaw only
+                    else if(args.length == 2){
+                        try{
+                            int yaw = Integer.parseInt(args[1]);
+                            getConfig().set("yaw", yaw);
+                            saveConfig();
+                            p.sendMessage(ChatColor.GREEN + "Yaw set to: " + ChatColor.DARK_GREEN + yaw);
+                        } catch(Exception ex){
+                            p.sendMessage(ChatColor.DARK_RED + ex.toString());
+                            p.sendMessage(ChatColor.RED + "You must specify a number.");
+                        }
+                    }
+
+                    //get player pos
+                    else if(args.length == 1){
+                        int x = (int) p.getLocation().getX();
+                        int y = (int) p.getLocation().getY();
+                        int z = (int) p.getLocation().getZ();
+
+                        p.getWorld().setSpawnLocation(x, y, z);
+                        getConfig().set("world", p.getWorld().getName());
+                        saveConfig();
+                        p.sendMessage(ChatColor.GREEN + "Spawn set to: " + ChatColor.DARK_GREEN + x + " " + y + " " + z + " " + p.getWorld().getName());
                     }
 
                     //normal
-                    if (args.length == 4) {
+                    else if (args.length == 4) {
                         try {
                             int arg1 = Integer.parseInt(args[1]);
                             int arg2 = Integer.parseInt(args[2]);
@@ -57,12 +82,12 @@ public class SpawnJoin extends JavaPlugin implements Listener {
                             p.sendMessage(ChatColor.GREEN + "Spawn set to: " + ChatColor.DARK_GREEN + arg1 + " " + arg2 + " " + arg3);
                         } catch (Exception ex) {
                             p.sendMessage(ChatColor.DARK_RED + ex.toString());
-                            p.sendMessage(ChatColor.RED + "Usage: /sj set <x> <y> <z> [yaw]");
+                            p.sendMessage(ChatColor.RED + "Usage: /sj set <x|yaw> <y> <z> [yaw]");
                         }
                     }
 
                     //yaw
-                    if (args.length == 5) {
+                    else if (args.length == 5) {
                         try {
                             int arg1 = Integer.parseInt(args[1]);
                             int arg2 = Integer.parseInt(args[2]);
@@ -75,7 +100,7 @@ public class SpawnJoin extends JavaPlugin implements Listener {
                             p.sendMessage(ChatColor.GREEN + "Spawn set to: " + ChatColor.DARK_GREEN + arg1 + " " + arg2 + " " + arg3 + " " + Integer.parseInt(args[4]));
                         } catch (Exception ex) {
                             p.sendMessage(ChatColor.DARK_RED + ex.toString());
-                            p.sendMessage(ChatColor.RED + "Usage: /sj set <x> <y> <z> [yaw]");
+                            p.sendMessage(ChatColor.RED + "Usage: /sj set <x|yaw> <y> <z> [yaw]");
                         }
                     }
                 } else {
@@ -95,7 +120,7 @@ public class SpawnJoin extends JavaPlugin implements Listener {
                 }
             } else if (args[0].equalsIgnoreCase("spawn")) {
                 if (p.hasPermission("spawnjoin.spawn")) {
-                    Location l = Bukkit.getWorld(getConfig().getString("world")).getSpawnLocation();
+                    Location l = Bukkit.getWorld(getConfig().getString("world")).getSpawnLocation().add(0.5, 0, 0.5);
                     l.setYaw(getConfig().getInt("yaw"));
                     p.teleport(l);
                 } else {
@@ -111,7 +136,7 @@ public class SpawnJoin extends JavaPlugin implements Listener {
             } else {
                 if (p.hasPermission("spawnjoin.help")) {
                     p.sendMessage(ChatColor.YELLOW + "---------- " + ChatColor.GOLD + "SpawnJoin" + ChatColor.YELLOW + " ----------");
-                    p.sendMessage(ChatColor.RED + "/sj set <x> <y> <z> [yaw] [world]");
+                    p.sendMessage(ChatColor.RED + "/sj set <x|yaw> <y> <z> [yaw] [world]");
                     p.sendMessage(ChatColor.RED + "/sj get");
                     p.sendMessage(ChatColor.RED + "/sj spawn");
                     p.sendMessage(ChatColor.RED + "/sj reload");
